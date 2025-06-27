@@ -1,3 +1,4 @@
+// src/sections/ContactSummary.jsx
 import { useRef } from "react";
 import Marquee from "../components/Marquee";
 import { useGSAP } from "@gsap/react";
@@ -44,17 +45,15 @@ const ContactSummary = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="https://drive.google.com/file/d/1t1KTSRlzflYcm54G5pkS0hbo4Fw3nu1K/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://drive.google.com/uc?export=download&id=1t1KTSRlzflYcm54G5pkS0hbo4Fw3nu1K"
+            download="Vaibhav_Sharma_Java_Developer.pdf"
             className="px-6 py-3 bg-gold text-dark rounded-full hover:bg-opacity-90 transition"
           >
             Java Developer Resume
           </a>
           <a
-            href="https://drive.google.com/file/d/10xGUbuj-DbabsF1A9dtoDPuBHI1CixM6/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://drive.google.com/uc?export=download&id=10xGUbuj-DbabsF1A9dtoDPuBHI1CixM6"
+            download="Vaibhav_Resume_MERN.pdf"
             className="px-6 py-3 bg-gold text-dark rounded-full hover:bg-opacity-90 transition"
           >
             MERN Stack Resume
