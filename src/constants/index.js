@@ -127,7 +127,7 @@ export const projects = [
   },
   {
     id: 4,
-    name: "Imaginify – AI SaaS Application",
+    name: "V-SAAS – AI SaaS Application",
     description:
       "Developed advanced image-processing features using Cloudinary AI with a responsive Tailwind CSS UI; integrated Stripe for payments (45% ↑ revenue) and built RESTful APIs in Next.js + MongoDB + TypeScript.",
     href: "https://final-seven-xi.vercel.app/",
