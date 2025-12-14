@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import { projects } from "../constants";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -10,9 +10,31 @@ const Works = () => {
   const overlayRefs = useRef([]);
   const previewRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(null);
+  const [activeTab, setActiveTab] = useState("all");
   const text = `Featured projects that have been meticulously
   crafted with passion to drive
   results and impact.`;
+
+  const filteredProjects = useMemo(() => {
+    if (activeTab === "all") return projects;
+    return projects.filter((project) => project.category === activeTab);
+  }, [activeTab]);
+
+  // Reset overlay refs when tab changes
+  useGSAP(() => {
+    overlayRefs.current = [];
+    setCurrentIndex(null);
+  }, [activeTab]);
+
+  // Ensure projects are visible immediately on tab change
+  useEffect(() => {
+    const projectElements = document.querySelectorAll("#project");
+    projectElements.forEach((el) => {
+      if (el) {
+        gsap.set(el, { opacity: 1, y: 0 });
+      }
+    });
+  }, [filteredProjects]);
 
   const mouse = useRef({ x: 0, y: 0 });
   const moveX = useRef(null);
@@ -27,16 +49,29 @@ const Works = () => {
       duration: 2,
       ease: "power3.out",
     });
-    gsap.from("#project", {
-      y: 100,
-      opacity: 0,
-      delay: 0.5,
-      duration: 1,
-      stagger: 0.3,
-      ease: "back.out",
-      scrollTrigger: { trigger: "#project" },
+    
+    // Set initial state to visible to prevent delay
+    gsap.set("#project", { opacity: 1, y: 0 });
+    
+    // Only animate if not already visible
+    const projectElements = document.querySelectorAll("#project");
+    projectElements.forEach((el, index) => {
+      if (el && window.getComputedStyle(el).opacity === "0") {
+        gsap.from(el, {
+          y: 100,
+          opacity: 0,
+          delay: 0.2,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: { 
+            trigger: el,
+            start: "top 85%",
+          },
+        });
+      }
     });
-  }, []);
+  }, [filteredProjects]);
 
   const handleMouseEnter = (index) => {
     if (window.innerWidth < 768) return;
@@ -88,6 +123,37 @@ const Works = () => {
     moveY.current(mouse.current.y);
   };
 
+  const tabs = [
+    { id: "all", label: "All Projects" },
+    { id: "fullstack", label: "Full Stack" },
+    { id: "genai", label: "Gen AI" },
+  ];
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setCurrentIndex(null);
+    
+    // Kill any existing animations
+    gsap.killTweensOf("#project");
+    
+    // Immediately show projects, then animate them in smoothly
+    const projectElements = document.querySelectorAll("#project");
+    projectElements.forEach((el, index) => {
+      if (el) {
+        // Set initial state
+        gsap.set(el, { opacity: 0, y: 30 });
+        // Animate in immediately without delay
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          delay: index * 0.05,
+          ease: "power2.out",
+        });
+      }
+    });
+  };
+
   return (
     <section id="work" className="flex flex-col min-h-screen">
       <AnimatedHeaderSection
@@ -98,15 +164,31 @@ const Works = () => {
         withScrollTrigger={true}
       />
 
+      <div className="flex flex-wrap justify-center gap-4 px-10 mb-8 mt-4">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => handleTabChange(tab.id)}
+            className={`px-6 py-2 text-sm font-light tracking-wider uppercase transition-all duration-300 border rounded-full ${
+              activeTab === tab.id
+                ? "bg-black text-white border-black"
+                : "bg-transparent text-black border-black/30 hover:border-black/60"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div
         className="relative flex flex-col font-light"
         onMouseMove={handleMouseMove}
       >
-        {projects.map((project, index) => (
+        {filteredProjects.map((project, index) => (
           <div
             key={project.id}
             id="project"
-            className="relative flex flex-col gap-4 py-8 cursor-pointer group md:gap-0"
+            className="relative flex flex-col gap-3 py-6 cursor-pointer group md:gap-0"
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={() => handleMouseLeave(index)}
           >
@@ -170,10 +252,10 @@ const Works = () => {
           ref={previewRef}
           className="fixed -top-1/3 left-0 z-50 overflow-hidden border-8 border-black pointer-events-none w-[700px] md:block hidden opacity-0"
         >
-          {currentIndex !== null && (
+          {currentIndex !== null && filteredProjects[currentIndex] && (
             <img
-              src={projects[currentIndex].image}
-              alt={projects[currentIndex].name}
+              src={filteredProjects[currentIndex].image}
+              alt={filteredProjects[currentIndex].name}
               className="object-cover w-full h-full"
             />
           )}

@@ -26,20 +26,20 @@ const ContactSummary = () => {
   return (
     <section
       ref={containerRef}
-      className="flex flex-col items-center justify-between min-h-screen gap-12 mt-16"
+      className="relative flex flex-col items-center justify-between min-h-screen gap-8 py-12"
     >
       <Marquee items={items} className="text-gold" />
 
-      <div className="overflow-hidden font-light text-center contact-text-responsive">
+      <div className="relative z-10 overflow-hidden font-light text-center contact-text-responsive px-6">
         <p>
-          “ Let’s build a <br />
+          " Let's build a <br />
           <span className="font-normal">memorable</span> &{" "}
           <span className="italic">inspiring</span> <br />
-          web application <span className="text-gold">together</span> “
+          web application <span className="text-gold">together</span> "
         </p>
       </div>
 
-      <div className="text-center space-y-4 px-6">
+      <div className="relative z-10 text-center space-y-4 px-6">
         <p className="text-lg md:text-xl lg:text-2xl font-medium text-gold">
           Interested in hiring me? Download my resume:
         </p>

@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import Navbar from "./sections/Navbar";
 import Hero from "./sections/Hero";
 import ServiceSummary from "./sections/ServiceSummary";
 import Services from "./sections/Services";
 import ReactLenis from "lenis/react";
-import About from "./sections/About";
-import Works from "./sections/Works";
-import ContactSummary from "./sections/ContactSummary";
-import Contact from "./sections/Contact";
 import { useProgress } from "@react-three/drei";
+
+// Lazy load heavy components for better performance
+const About = lazy(() => import("./sections/About"));
+const Works = lazy(() => import("./sections/Works"));
+const HireMe = lazy(() => import("./sections/HireMe"));
+const ContactSummary = lazy(() => import("./sections/ContactSummary"));
+const ContactForm = lazy(() => import("./sections/ContactForm"));
+const Contact = lazy(() => import("./sections/Contact"));
 
 const App = () => {
   const { progress } = useProgress();
@@ -44,10 +48,24 @@ const App = () => {
         <Hero />
         <ServiceSummary />
         <Services />
-        <About />
-        <Works />
-        <ContactSummary />
-        <Contact />
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="text-center">
+                <div className="mb-4 text-xl font-light tracking-widest text-black animate-pulse">
+                  Loading...
+                </div>
+              </div>
+            </div>
+          }
+        >
+          <About />
+          <Works />
+          <HireMe />
+          <ContactSummary />
+          <ContactForm />
+          <Contact />
+        </Suspense>
       </div>
     </ReactLenis>
   );

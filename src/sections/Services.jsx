@@ -7,8 +7,8 @@ import gsap from "gsap";
 
 const Services = () => {
   const text = `I build secure, high-performance full-stack apps
-    with smooth UX to drive growth 
-    not headaches.`;
+    with Gen AI integration and smooth UX 
+    to drive growth, not headaches.`;
   const serviceRefs = useRef([]);
   const isDesktop = useMediaQuery({ minWidth: "48rem" }); 
 

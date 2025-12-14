@@ -33,6 +33,13 @@ const ServiceSummary = () => {
         scrub: true,
       },
     });
+    gsap.to("#title-service-5", {
+      xPercent: 50,
+      scrollTrigger: {
+        trigger: "#title-service-5",
+        scrub: true,
+      },
+    });
   });
 
   return (
@@ -63,6 +70,17 @@ const ServiceSummary = () => {
 
       <div id="title-service-4" className="translate-x-48">
         <p>CI/CD & DevOps</p>
+      </div>
+
+      <div
+        id="title-service-5"
+        className="flex items-center justify-center gap-3 -translate-x-24"
+      >
+        <p>Gen AI Integration</p>
+        <div className="w-10 h-1 md:w-32 bg-gold" />
+        <p>LLM APIs</p>
+        <div className="w-10 h-1 md:w-32 bg-gold" />
+        <p>AI Automation</p>
       </div>
     </section>
   );
